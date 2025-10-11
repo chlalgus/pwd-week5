@@ -1,6 +1,6 @@
 // src/controllers/submissions.controller.js
 const submissionsService = require('../services/submissions.service');
-const asyncHandler = require('../utils/asyncHandler');
+const asyncHandler = require('express-async-handler');
 
 const normaliseMenu = (menu) => {
   if (!menu) return [];
