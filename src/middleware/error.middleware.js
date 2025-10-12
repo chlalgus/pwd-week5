@@ -1,14 +1,15 @@
-// src/routes/restaurants.routes.js
-const express = require('express');
-const restaurantsController = require('../controllers/restaurants.controller');
+// src/middleware/error.middleware.js
+module.exports = function errorHandler(err, req, res, next) {
+  const status = err.statusCode || 500;
+  const payload = {
+    error: {
+      message: err.message || 'Internal Server Error'
+    }
+  };
 
-const router = express.Router();
+  if (process.env.NODE_ENV !== 'production' && err.stack) {
+    payload.error.stack = err.stack;
+  }
 
-router.get('/', restaurantsController.getRestaurants);
-router.get('/sync-demo', restaurantsController.getRestaurantsSync);
-router.get('/popular', restaurantsController.getPopularRestaurants);
-router.get('/:id', restaurantsController.getRestaurant);
-router.post('/', restaurantsController.createRestaurant);
-router.post('/reset-demo', restaurantsController.resetDemoData);
-
-module.exports = router;
+  res.status(status).json(payload);
+};
